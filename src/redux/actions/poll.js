@@ -7,9 +7,23 @@ export const setPollData = (payload) => {
   };
 };
 
+export const addPollAnswer = (payload) => {
+  return {
+    type: types.ADD_POLL_ANSWER,
+    payload,
+  };
+};
+
 export const resetPollData = () => {
   return {
     type: types.RESET_POLL_DATA,
+  };
+};
+
+export const setCorrectAnswer = (payload) => {
+  return {
+    type: types.SET_CORRECT_ANSWER,
+    payload,
   };
 };
 

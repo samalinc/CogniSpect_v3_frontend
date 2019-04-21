@@ -43,6 +43,8 @@ export const SET_USER_DATA = 'user/SET_USER_DATA';
 
 export const SET_POLL_DATA = 'poll/SET_POLL_DATA';
 export const RESET_POLL_DATA = 'poll/RESET_POLL_DATA';
+export const ADD_POLL_ANSWER = 'poll/ADD_POLL_ANSWER';
+export const SET_CORRECT_ANSWER = 'poll/SET_CORRECT_ANSWER';
 
 export const CREATE_POLL_REQUEST = 'poll/CREATE_POLL_REQUEST';
 export const CREATE_POLL_SUCCESS = 'poll/CREATE_POLL_SUCCESS';

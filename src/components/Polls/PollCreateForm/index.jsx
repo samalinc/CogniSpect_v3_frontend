@@ -12,23 +12,16 @@ import {
   AnswerInput,
   AddAnswer,
 } from 'components';
+import CreatableSelect from 'react-select/lib/Creatable';
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
+import { getPoll } from 'redux/sagas/poll/selectors';
 import styles from './styles.module.scss';
 
-const PollCreateForm = React.memo(({ showModal, ...rest }) => {
-  const resetData = () => {
-    showModal(
-      'CONFIRM_MODAL',
-      {
-        title: 'Reset data',
-        confirmButtonTitle: 'Confirm',
-        confirmAction: () => { },
-        message: (<h4>Are you sure you want to clear the data?</h4>),
-        type: 'danger',
-      },
-    );
-  };
+const PollCreateForm = React.memo(({
+  onDataChange, colourStyles, addPollAnswer,
+  poll, setCorrectAnswer,
+}) => {
   return (
     <Fragment>
       <Card>
@@ -40,6 +33,7 @@ const PollCreateForm = React.memo(({ showModal, ...rest }) => {
           <CardBody>
             <Label>Description</Label>
             <Input
+              onChange={onDataChange}
               className="mb-2"
               required
               rows="5"
@@ -48,29 +42,39 @@ const PollCreateForm = React.memo(({ showModal, ...rest }) => {
               type="textarea"
             />
             <Label>Subject</Label>
-            <Input
-              className="mb-2"
-              name="subject"
-              type="select"
+            <CreatableSelect
+              isClearable
+              // onChange={()}
+              // onInputChange={this.handleInputChange}
+              styles={colourStyles}
+              onCreateOption={() => { return console.log('create'); }}
+              // options={}
             />
             <Label>Topic</Label>
-            <Input
-              className="mb-2"
-              name="topic"
-              type="select"
+            <CreatableSelect
+              isClearable
+              // onChange={()}
+              // onInputChange={this.handleInputChange}
+              styles={colourStyles}
+              onCreateOption={() => { return console.log('create'); }}
+              // options={}
             />
             <Label>Answers</Label>
             <div className={styles.answers}>
-              <AnswerInput
-                isSwitchEnable
-              />
-              <AnswerInput
-                isSwitchEnable
-              />
-              <AnswerInput
-                isSwitchEnable
-              />
-              <AddAnswer />
+              {
+                poll.answers.map((answer, iterator) => {
+                  return (
+                    <AnswerInput
+                      iterator={iterator}
+                      setCorrectAnswer={setCorrectAnswer}
+                      key={`${answer}-${iterator}`}
+                      answer={answer}
+                      isSwitchEnable
+                    />
+                  );
+                })
+              }
+              <AddAnswer addPollAnswer={addPollAnswer} />
             </div>
           </CardBody>
           <div className={styles.pollButtons}>
@@ -80,14 +84,7 @@ const PollCreateForm = React.memo(({ showModal, ...rest }) => {
             >
               {'Create question'}
             </Button>
-            <Button
-              color="danger"
-              onClick={resetData}
-            >
-              {'Reset data'}
-            </Button>
           </div>
-
         </Form>
       </Card>
     </Fragment>
@@ -95,7 +92,9 @@ const PollCreateForm = React.memo(({ showModal, ...rest }) => {
 });
 
 const mapStateToProps = (state) => {
-  return state;
+  return {
+    poll: getPoll(state),
+  };
 };
 
 export default connect(mapStateToProps, {
