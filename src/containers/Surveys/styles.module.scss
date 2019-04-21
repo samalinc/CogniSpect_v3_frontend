@@ -1,0 +1,12 @@
+.addGroup {
+    border: 1px black dashed;
+    padding: 10px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    color: grey;
+    cursor: pointer;
+    transition: all 170ms ease-in;
+    &:hover {
+      color: white;
+    }
+  }

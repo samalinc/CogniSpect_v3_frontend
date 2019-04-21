@@ -1,0 +1,115 @@
+$darkblue: #16446b;
+.popover {
+  margin: auto;
+  display: block;
+  background: white;
+  // padding: 25px;
+  box-shadow: 0px 0px 25px -5px color($darkblue alpha(0.9));
+  border-radius: 3px;
+  color: #606060;
+  //font-size: 16px/20px;
+  z-index: 999;
+  cursor: auto;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0;
+  transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+  &.shown {
+    visibility: visible;
+    opacity: 1;
+    max-height: 500px;
+  }
+  &.noArrow {
+    &:before {
+      display: none;
+    }
+  }
+}
+
+.topLeft {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+}
+
+.topRight {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  margin-bottom: 8px;
+}
+
+.bottomLeft {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+}
+
+.bottomRight {
+  top: 100%;
+  right: 0;
+  position: absolute;
+  margin-top: 8px;
+}
+
+.arrowTopLeft,
+.arrowTopRight,
+.arrowTopCenter {
+  &:before {
+    border-width: 0 8px 8px 8px;
+    border-color: transparent transparent white transparent;
+  }
+}
+
+.arrowTopCenter {
+  &:before {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+
+.arrowTopLeft {
+  &:before {
+    position: absolute;
+    top: -8px;
+    left: 10px;
+  }
+}
+
+.arrowTopRight {
+  &:before {
+    position: absolute;
+    top: -8px;
+    right: 10px;
+  }
+}
+
+.arrowBottomLeft,
+.arrowBottomRight {
+  &:before {
+    border-width: 8px 8px 0 8px;
+    border-color: white transparent transparent transparent;
+  }
+}
+
+.arrowBottomLeft {
+  &:before {
+    position: absolute;
+    bottom: -8px;
+    left: 10px;
+  }
+}
+
+.arrowBottomRight {
+  &:before {
+    position: absolute;
+    right: 10px;
+    bottom: -8px;
+  }
+}

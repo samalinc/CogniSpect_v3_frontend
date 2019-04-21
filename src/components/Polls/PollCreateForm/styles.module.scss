@@ -1,0 +1,14 @@
+.answers {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 700px;
+}
+.pollButtons {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 25px  auto;
+}

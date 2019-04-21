@@ -1,0 +1,13 @@
+.placeholder {
+  background: #343b41;
+  font-size: 22px;
+  padding: 60px 20px;
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  svg {
+    fill: white;
+  }
+}

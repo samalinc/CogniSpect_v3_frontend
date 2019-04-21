@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("./fonts/SF-UI-Display-Thin.woff2") format("woff2"), url("./fonts/SF-UI-Display-Thin.woff") format("woff");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("./fonts/SF-UI-Display-Light.woff2") format("woff2"), url("./fonts/SF-UI-Display-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("./fonts/SF-UI-Display-Regular.woff2") format("woff2"), url("./fonts/SF-UI-Display-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("./fonts/SF-UI-Display-Medium.woff2") format("woff2"), url("./fonts/SF-UI-Display-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("./fonts/SF-UI-Display-Semibold.woff2") format("woff2"), url("./fonts/SF-UI-Display-Semibold.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SFUIDisplay";
+    src: url("/fonts/SF-UI-Display-Bold.woff2") format("woff2"), url("/fonts/SF-UI-Display-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+}

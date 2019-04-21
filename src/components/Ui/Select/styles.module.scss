@@ -1,0 +1,19 @@
+.dropdown {
+  display: flex;
+  justify-content: space-between;
+  background-color: #2f353a;
+  font-size: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 2s linear;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+.language {
+  width: 75%;
+}
+.dropDown {
+  height: 500px !important;
+  overflow-y: scroll;
+}
