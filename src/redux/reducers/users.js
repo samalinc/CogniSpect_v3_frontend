@@ -18,8 +18,8 @@ function guests(state = initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: null,
-      items: action.payload.data,
-      total: action.payload.data.length,
+      items: action.payload,
+      total: action.payload.length,
     }); }
 
   case types.CREATE_USER_FAILURE:
@@ -75,20 +75,20 @@ function guests(state = initialState, action) {
 }
 
 const currentGuestInitialState = {
-  first_name: '',
-  second_name: '',
+  firstName: '',
+  lastName: '',
   email: '',
   role: 'STUDENT',
   password: '',
   login: '',
-  study_group: null,
+  studyGroup: null,
   isLoading: true,
   error: false,
 };
 
 export default combineReducers({
   all: guests,
-  currentGuest: single({
+  currentUser: single({
     types: [types.GET_USER_REQUEST, types.GET_USER_SUCCESS, types.GET_USER_FAILURE],
   })((state = currentGuestInitialState, action = {}) => {
     switch (action.type) {

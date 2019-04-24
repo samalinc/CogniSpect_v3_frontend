@@ -110,3 +110,11 @@ export const loadPollsFailure = (payload) => {
     payload,
   };
 };
+
+export const addPollAnswerText = (payload) => {
+  return {
+    type: types.ADD_POLL_ANSWER_TEXT,
+    payload,
+  };
+};
+

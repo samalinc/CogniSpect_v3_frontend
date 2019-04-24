@@ -2,7 +2,7 @@ import API from 'utils/axiosClient';
 
 export async function loadUsers(payload) {
   try {
-    return API.get('auth/signup');
+    return API.get('account/filter');
   } catch (error) {
     throw error;
   }
@@ -15,6 +15,14 @@ export async function getUser(id) {
         id,
       },
     });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createUser(data) {
+  try {
+    return API.post('auth/signup', data);
   } catch (error) {
     throw error;
   }

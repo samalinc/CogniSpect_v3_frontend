@@ -4,13 +4,13 @@ import { Input, Label } from 'reactstrap';
 import styles from './styles.module.scss';
 
 const AnswerInput = ({
-  isSwitchEnable, onChange,
+  isSwitchEnable, onChange, index,
   setCorrectAnswer, iterator, answer,
 }) => {
   return (
     <div className={styles.answer}>
       <Input
-        onChange={onChange}
+        onChange={(event) => { return onChange({ index, value: event.target.value }); }}
         name="answer"
         placeholder="Answer"
         className="mr-4"

@@ -85,6 +85,27 @@ export const updateUserFailure = (payload) => {
   };
 };
 
+export const getUserRequest = (payload) => {
+  return {
+    type: types.GET_USER_REQUEST,
+    payload,
+  };
+};
+
+export const getUserSuccess = (payload) => {
+  return {
+    type: types.GET_USER_SUCCESS,
+    payload,
+  };
+};
+
+export const getUserFailure = (payload) => {
+  return {
+    type: types.GET_USER_FAILURE,
+    payload,
+  };
+};
+
 export const setUserData = (payload) => {
   return {
     type: types.SET_USER_DATA,

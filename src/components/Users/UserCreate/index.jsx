@@ -1,11 +1,16 @@
 import React from 'react';
 import { UsersIndex } from 'components';
-import { setUserData } from 'redux/actions/users';
+import {
+  setUserData,
+} from 'redux/actions/users';
 import { connect } from 'react-redux';
+import { getUser } from 'redux/sagas/users/selectors';
 
-const UserCreate = React.memo(({ setUserData }) => {
+const UserCreate = React.memo(({ setUserData, user }) => {
   return (
     <UsersIndex
+      isEdit
+      user={user}
       onChange={setUserData}
     />
   );
@@ -13,6 +18,12 @@ const UserCreate = React.memo(({ setUserData }) => {
 
 UserCreate.displayName = 'UserCreate';
 
-export default connect(null, {
+const mapStateToProps = (state) => {
+  return {
+    user: getUser(state),
+  };
+};
+
+export default connect(mapStateToProps, {
   setUserData,
 })(UserCreate);

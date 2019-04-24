@@ -20,12 +20,13 @@ import styles from './styles.module.scss';
 
 const PollCreateForm = React.memo(({
   onDataChange, colourStyles, addPollAnswer,
-  poll, setCorrectAnswer,
+  poll, setCorrectAnswer, addPollAnswerText,
+  createPoll,
 }) => {
   return (
     <Fragment>
       <Card>
-        <Form>
+        <Form onSubmit={(event) => { event.preventDefault(); return createPoll(); }}>
           <CardHeader tag="h3">
             <i className="icon-question" />
             {'Create question'}
@@ -65,6 +66,8 @@ const PollCreateForm = React.memo(({
                 poll.answers.map((answer, iterator) => {
                   return (
                     <AnswerInput
+                      index={iterator}
+                      onChange={addPollAnswerText}
                       iterator={iterator}
                       setCorrectAnswer={setCorrectAnswer}
                       key={`${answer}-${iterator}`}

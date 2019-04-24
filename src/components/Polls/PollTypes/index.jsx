@@ -10,9 +10,10 @@ import {
 import { withRouter } from 'react-router';
 import { questionTypes } from 'utils/constants';
 
-const PollTypes = React.memo(({ questionType, ...rest }) => {
+const PollTypes = React.memo(({ questionType, setPollData, ...rest }) => {
   const onQuestionTypeChange = (type) => {
     return () => {
+      setPollData({ name: 'type', value: type });
       const params = new URLSearchParams(location.search);
       params.set('type', type);
       rest.history.push(`?${params.toString()}`);

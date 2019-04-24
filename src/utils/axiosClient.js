@@ -14,7 +14,7 @@ API.interceptors.request.use(
   (config) => {
     const storedToken = cookie.getItem('authToken');
     if (!config.headers.authorization && !!storedToken) {
-      config.headers.authorization = storedToken;
+      config.headers.authorization = `Bearer ${storedToken}`;
     }
     return config;
   },

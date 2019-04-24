@@ -11,102 +11,39 @@ import {
   Loader,
   Placeholder,
   Paginate,
-  UserCreate,
-  UserEdit,
 } from 'components';
 
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
-import debounce from 'lodash/debounce';
 import { ITEM_PER_PAGE } from 'utils/constants';
 import {
-  loadUsersRequest,
-  createUserRequest,
-  getUserRequest,
-} from 'redux/actions/users';
-import { getUsers } from 'redux/sagas/users/selectors';
+  loadPollsRequest,
+} from 'redux/actions/poll';
+import { getPolls } from 'redux/sagas/poll/selectors';
 import styles from './styles.module.scss';
 
-class ConferenceContainer extends Component {
+class Polls extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       page: 1,
     };
-    this.createUser = ::this.createUser;
-    this.removeMeeting = ::this.removeMeeting;
-    this.onChange = ::this.onChange;
+    this.removePoll = ::this.removePoll;
     this.onPageChange = ::this.onPageChange;
-    this.onSearchDebounce = debounce(this.onSearchDebounce, 350);
   }
 
   componentDidMount() {
-    const { loadUsers } = this.props;
+    const { loadPolls } = this.props;
 
-    loadUsers({});
+    loadPolls({});
   }
 
-  onSearchDebounce = (value) => {
-    // const {
-    //   loadMeetings,
-    // } = this.props;
 
-    // loadMeetings({
-    //   query: {
-    //     $sort: {
-    //       createdAt: 1,
-    //     },
-    //     title: { $like: `${value}%` },
-    //   },
-    // });
+  editPoll = (id) => {
   }
 
-  createUser() {
-    const {
-      showModal,
-      deleteConfernce,
-      createUser,
-    } = this.props;
-    showModal(
-      'CONFIRM_MODAL',
-      {
-        title: 'Create user',
-        confirmButtonTitle: 'Confirm',
-        confirmAction: () => { createUser(); },
-        message: (
-          <UserCreate />
-        ),
-        type: 'primary',
-      },
-    );
-  }
-
-  editUser = (id) => {
-    return () => {
-      const {
-        showModal,
-        getUser,
-        createUser,
-      } = this.props;
-
-      getUser(id);
-      showModal(
-        'CONFIRM_MODAL',
-        {
-          title: 'Create user',
-          confirmButtonTitle: 'Confirm',
-          confirmAction: () => { createUser(); },
-          message: (
-            <UserEdit />
-          ),
-          type: 'primary',
-        },
-      );
-    };
-  }
-
-  removeMeeting(meetingId, meetingName) {
+  removePoll(meetingId, meetingName) {
     const {
       showModal,
       deleteConfernce,
@@ -115,7 +52,7 @@ class ConferenceContainer extends Component {
     showModal(
       'CONFIRM_MODAL',
       {
-        title: 'Remove meeting',
+        title: 'Remove poll',
         confirmButtonTitle: 'Confirm',
         confirmAction: () => { deleteConfernce(meetingId); },
         message: (<h4>{`Remove ${meetingName} ?`}</h4>),
@@ -124,24 +61,16 @@ class ConferenceContainer extends Component {
     );
   }
 
-  onChange(event) {
-    const {
-      value,
-    } = event.target;
-
-    this.onSearchDebounce(value);
-  }
-
   onPageChange(current) {
     const {
-      loadMeetings,
+      loadPolls,
       history,
     } = this.props;
 
     this.setState({ page: current });
 
     history.push(`?page=${current}`);
-    loadMeetings({
+    loadPolls({
       query: {
         $sort: {
           createdAt: 1,
@@ -155,16 +84,17 @@ class ConferenceContainer extends Component {
   render() {
     const {
       history,
-      users,
+      polls,
     } = this.props;
     const { page } = this.state;
+    console.log(polls.items);
     const pageNumber = history.location.search.split('');
     return (
       <Card>
         <CardHeader className={styles.cardHeader}>
           <div>
             <i className="fa fa-align-justify mr-3" />
-            <strong className="mr-4">Users</strong>
+            <strong className="mr-4">Polls</strong>
           </div>
           <Input
             placeholder="Search"
@@ -176,12 +106,12 @@ class ConferenceContainer extends Component {
             onClick={this.createUser}
             color="success"
           >
-              Create new user
+              Create new poll
           </Button>
         </CardHeader>
-        <Loader loaded={!users.isLoading}>
+        <Loader loaded={!polls.isLoading}>
           {
-            users.items.length === 0 ? <Placeholder text="Sorry, no content!" />
+            polls.items.length === 0 ? <Placeholder text="Sorry, no content!" />
               : (
                 <CardBody>
                   <Table
@@ -192,25 +122,23 @@ class ConferenceContainer extends Component {
                     <thead>
                       <tr>
                         <th>Id</th>
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>E-mail</th>
-                        <th>Role</th>
-                        <th>Study group</th>
+                        <th>Topic</th>
+                        <th>Subject</th>
+                        <th>Type</th>
+                        <th>Description</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody style={{ fontWeight: 'normal' }}>
                       {
-                        users.items.map(((user, index) => {
+                        polls.items.map(((poll, index) => {
                           return (
-                            <tr key={user.id}>
+                            <tr key={poll.id}>
                               <th scope="row">{index}</th>
-                              <th scope="row">{user.firstName || '-'}</th>
-                              <th scope="row">{user.lastName || '-'}</th>
-                              <th scope="row">{user.email || '-'}</th>
-                              <th scope="row">{user.role || '-'}</th>
-                              <th scope="row">{user.studyGroup || '-'}</th>
+                              <th scope="row">{poll.topic.name || '-'}</th>
+                              <th scope="row">{poll.topic.subject.name || '-'}</th>
+                              <th scope="row">{poll.type || '-'}</th>
+                              <th scope="row">{poll.description || '-'}</th>
                               <th scope="row">
                                 <Button
                                 //   onClick={() => { return this.chooseConference(meeting.id); }}
@@ -252,13 +180,11 @@ class ConferenceContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    users: getUsers(state),
+    polls: getPolls(state),
   };
 };
 
 export default connect(mapStateToProps, {
   showModal,
-  loadUsers: loadUsersRequest,
-  createUser: createUserRequest,
-  getUser: getUserRequest,
-})(ConferenceContainer);
+  loadPolls: loadPollsRequest,
+})(Polls);

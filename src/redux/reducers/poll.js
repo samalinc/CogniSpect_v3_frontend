@@ -13,6 +13,22 @@ const initialState = {
 
 function poll(state = initialState, action) {
   switch (action.type) {
+  case types.LOAD_POLLS_REQUEST: {
+    return Object.assign({}, state, { isLoading: true, error: null }); }
+  case types.LOAD_POLLS_SUCCESS: {
+    return Object.assign({}, state, {
+      isLoading: false,
+      error: null,
+      items: action.payload,
+      total: action.payload.length,
+    }); }
+
+  case types.LOAD_POLLS_FAILURE: {
+    return Object.assign({}, state, {
+      isLoading: false,
+      error: action.payload,
+    }); }
+
   default:
     return state;
   }
@@ -28,9 +44,9 @@ const currentPollInitialState = {
   sortAnswers: [],
   substitutions: [],
   topic: {
-    name: '',
+    name: '1',
     subject: {
-      name: '',
+      name: '1',
     },
   },
   type: 'CHOOSE',
@@ -41,7 +57,7 @@ const currentPollInitialState = {
 export default combineReducers({
   all: poll,
   currentPoll: single({
-    types: [types.GET_USER_REQUEST, types.GET_USER_SUCCESS, types.GET_USER_FAILURE],
+    types: [types.GET_POLL_REQUEST, types.GET_POLL_SUCCESS, types.GET_POLL_FAILURE],
   })((state = currentPollInitialState, action = {}) => {
     switch (action.type) {
     case types.SET_POLL_DATA: {
@@ -60,6 +76,16 @@ export default combineReducers({
         }],
       });
     }
+    case types.ADD_POLL_ANSWER_TEXT: {
+      return merge({}, state, {
+        answers: state.answers.find((answer, index, array) => {
+          if (index === action.payload.index) {
+            array[index].text = action.payload.value;
+            return array;
+          }
+        }),
+      });
+    }
     case types.SET_CORRECT_ANSWER: {
       const newAnswers = state.answers;
       switch (state.type) {
@@ -70,6 +96,14 @@ export default combineReducers({
           }
           answer.correct = false;
           return answer;
+        });
+        break;
+      }
+      case 'MULTICHOOSE': {
+        newAnswers.forEach((answer, index) => {
+          if (index === action.payload) {
+            return answer.correct = true;
+          }
         });
         break;
       }

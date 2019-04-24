@@ -74,7 +74,7 @@ export const mainNavigation = {
       name: 'Question list',
       icon: 'nav-icon icon-question',
       exact: true,
-      url: '/questions/1',
+      url: '/polls/?page=1',
     },
     {
       name: 'New question',
@@ -84,7 +84,19 @@ export const mainNavigation = {
     },
     {
       title: true,
-      name: 'Tests',
+      name: 'Settings',
+    },
+    {
+      name: 'Subjects',
+      icon: 'cui-layers',
+      exact: true,
+      url: '/subjects',
+    },
+    {
+      name: 'Topics',
+      icon: 'cui-bookmark',
+      exact: true,
+      url: '/topics',
     },
     {
       name: 'Settings',

@@ -19,7 +19,7 @@ export { default as Paginate } from './Ui/Paginate';
 export { default as UserInput } from './Users/UserInput';
 export { default as UsersIndex } from './Users/UsersIndex';
 export { default as UserCreate } from './Users/UserCreate';
-
+export { default as UserEdit } from './Users/UserEdit';
 export { default as DefaultHeaderDropdown } from './AsideMenu/DefaultHeaderDropDown';
 
 

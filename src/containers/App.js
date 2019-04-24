@@ -14,6 +14,7 @@ import {
   Users,
   Surveys,
   PollCreate,
+  Polls,
 } from 'containers';
 import Login from 'containers/Login';
 import NotFound from 'containers/NotFound';
@@ -84,16 +85,16 @@ class App extends Component {
             </DefaultLayout>
           )}
         />
-        {/* <PrivateRoute
-          path="/questions/:page"
+        <PrivateRoute
+          path="/polls"
           exact
           isAuth={isAuth}
           component={(
             <DefaultLayout>
-              <Surveys {...this.props} />
+              <Polls {...this.props} />
             </DefaultLayout>
           )}
-        /> */}
+        />
         <PrivateRoute
           path="*"
           exact

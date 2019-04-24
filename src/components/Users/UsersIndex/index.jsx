@@ -8,13 +8,14 @@ import { TextMask, InputAdapter } from 'react-text-mask-hoc';
 import emailMask from 'text-mask-addons/dist/emailMask';
 import { userRoles } from 'utils/constants';
 
-const UsersIndex = React.memo(({ user, onChange }) => {
+const UsersIndex = React.memo(({ user, onChange, isEdit }) => {
   const onUserDataChange = (event) => {
     return onChange({
       name: event.target.name,
       value: event.target.value,
     });
   };
+  console.log(user);
   return (
     <Form>
       <UserInput
@@ -29,7 +30,12 @@ const UsersIndex = React.memo(({ user, onChange }) => {
           {
             userRoles.map((role) => {
               return (
-                <option key={role.key}>{role.value}</option>
+                <option
+                  value={role.key}
+                  key={role.key}
+                >
+                  {role.value}
+                </option>
               );
             })
           }
@@ -40,8 +46,9 @@ const UsersIndex = React.memo(({ user, onChange }) => {
         label="First name"
       >
         <Input
+          defaultValue={user.firstName}
           onChange={onUserDataChange}
-          name="first_name"
+          name="firstName"
           className="form-control"
         />
       </UserInput>
@@ -50,8 +57,9 @@ const UsersIndex = React.memo(({ user, onChange }) => {
         label="Second name"
       >
         <Input
+          defaultValue={user.lastName}
           onChange={onUserDataChange}
-          name="second_name"
+          name="lastName"
           className="form-control"
         />
       </UserInput>
@@ -82,27 +90,37 @@ const UsersIndex = React.memo(({ user, onChange }) => {
           className="form-control"
         />
       </UserInput>
-      <UserInput
-        icon="fa fa-key "
-        label="Password"
-      >
-        <Input
-          onChange={onUserDataChange}
-          type="password"
-          name="password"
-          className="form-control"
-        />
-      </UserInput>
-      <UserInput
-        icon="fa fa-users "
-        label="Group"
-      >
-        <Input
-          type="number"
-          name="study_group"
-          className="form-control"
-        />
-      </UserInput>
+      {
+        isEdit && (
+          <UserInput
+            icon="fa fa-key "
+            label="Password"
+          >
+            <Input
+              onChange={onUserDataChange}
+              type="password"
+              name="password"
+              className="form-control"
+            />
+          </UserInput>
+        )
+      }
+      {
+        user.role === 'STUDENT' && (
+          <UserInput
+            icon="fa fa-users "
+            label="Group"
+          >
+            <Input
+              defaultValue={user.studentGroup}
+              type="number"
+              name="studyGroup"
+              className="form-control"
+            />
+          </UserInput>
+        )
+      }
+
     </Form>
   );
 });
