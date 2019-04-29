@@ -15,12 +15,12 @@ import {
   Surveys,
   PollCreate,
   Polls,
+  Topics,
 } from 'containers';
 import Login from 'containers/Login';
 import NotFound from 'containers/NotFound';
 import AuthLayout from '../layouts/AuthLayout';
 import DefaultLayout from '../layouts/DefaultLayout';
-import ConferenceLayout from '../layouts/ConferenceLayout';
 
 import './App.scss';
 
@@ -92,6 +92,16 @@ class App extends Component {
           component={(
             <DefaultLayout>
               <Polls {...this.props} />
+            </DefaultLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/topics"
+          exact
+          isAuth={isAuth}
+          component={(
+            <DefaultLayout>
+              <Topics {...this.props} />
             </DefaultLayout>
           )}
         />

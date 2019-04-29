@@ -87,7 +87,7 @@ class Polls extends Component {
       polls,
     } = this.props;
     const { page } = this.state;
-    console.log(polls.items);
+
     const pageNumber = history.location.search.split('');
     return (
       <Card>

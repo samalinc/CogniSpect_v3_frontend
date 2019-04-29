@@ -4,6 +4,7 @@ import auth from './auth';
 import modal from './modal';
 import users from './users';
 import poll from './poll';
+import topic from './topic';
 
 export default combineReducers({
   app,
@@ -11,5 +12,6 @@ export default combineReducers({
   modal,
   users,
   poll,
+  topic,
 });
 

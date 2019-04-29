@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { REQUEST_AUTH } from 'redux/actions/actionTypes';
+import * as Sentry from '@sentry/browser';
 import store from './redux/store';
 import App from './containers/App';
 import { register } from './registerServiceWorker';
