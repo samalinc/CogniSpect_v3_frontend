@@ -39,9 +39,14 @@ const currentPollInitialState = {
     text: '',
     correct: false,
   }],
+  sortAnswers: [
+    {
+      position: 0,
+      text: '',
+    },
+  ],
   description: '',
   matchAnswers: [],
-  sortAnswers: [],
   substitutions: [],
   topic: {
     name: '1',
@@ -69,18 +74,89 @@ export default combineReducers({
       return currentPollInitialState;
     }
     case types.ADD_POLL_ANSWER: {
+      switch (state.type) {
+      case 'MULTICHOOSE':
+      case 'SUBSTITUTION':
+      case 'CHOOSE': {
+        return Object.assign({}, state, {
+          answers: [...state.answers, {
+            text: '',
+            correct: false,
+          }],
+        });
+      }
+      case 'SORT': {
+        return Object.assign({}, state, {
+          sortAnswers: [...state.sortAnswers, {
+            text: '',
+            position: state.sortAnswers[state.sortAnswers.length - 1].position + 1,
+          }],
+        });
+      }
+      case 'MATCH': {
+        return Object.assign({}, state, {
+          matchAnswers: [...state.matchAnswers, {
+            key: '',
+            value: '',
+          }],
+        });
+      }
+      default: return state;
+      }
+    }
+    case types.ADD_POLL_ANSWER_TEXT: {
+      switch (state.type) {
+      case 'MULTICHOOSE':
+      case 'CHOOSE': {
+        return merge({}, state, {
+          answers: state.answers.find((answer, index, array) => {
+            if (index === action.payload.index) {
+              array[index].text = action.payload.value;
+              return array;
+            }
+          }),
+        });
+      }
+      case 'SORT': {
+        return merge({}, state, {
+          sortAnswers: state.sortAnswers.find((answer, index, array) => {
+            if (index === action.payload.index) {
+              array[index].text = action.payload.value;
+              return array;
+            }
+          }),
+        });
+      }
+      case 'MATCH': {
+        return merge({}, state, {
+          matchAnswers: state.matchAnswers.find((answer, index, array) => {
+            if (index === action.payload.index) {
+              array[index][action.payload.name] = action.payload.value;
+              return array;
+            }
+          }),
+        });
+      }
+      default: return state;
+      }
+    }
+
+    case types.ADD_POLL_SUBSTITUTION: {
       return Object.assign({}, state, {
-        answers: [...state.answers, {
+        substitutions: [...state.substitutions, {
           text: '',
-          correct: false,
+          rightAnswer: {
+            correct: true,
+            text: '',
+          },
         }],
       });
     }
-    case types.ADD_POLL_ANSWER_TEXT: {
+    case types.SET_POLL_SORT_POSITION: {
       return merge({}, state, {
-        answers: state.answers.find((answer, index, array) => {
+        sortAnswers: state.sortAnswers.find((answer, index, array) => {
           if (index === action.payload.index) {
-            array[index].text = action.payload.value;
+            array[index].position = action.payload.value;
             return array;
           }
         }),

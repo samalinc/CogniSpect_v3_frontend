@@ -14,6 +14,20 @@ export const addPollAnswer = (payload) => {
   };
 };
 
+export const setPollSortPosition = (payload) => {
+  return {
+    type: types.SET_POLL_SORT_POSITION,
+    payload,
+  };
+};
+
+export const addPollSubstitution = (payload) => {
+  return {
+    type: types.ADD_POLL_SUBSTITUTION,
+    payload,
+  };
+};
+
 export const resetPollData = () => {
   return {
     type: types.RESET_POLL_DATA,

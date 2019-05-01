@@ -16,11 +16,14 @@ import {
   setCorrectAnswer,
   addPollAnswerText,
   createPollRequest,
+  setPollSortPosition,
+  addPollSubstitution,
 } from 'redux/actions/poll';
 
 const PollCreate = React.memo(({
   setPollData, resetPollData, poll, createPoll,
   addPollAnswer, setCorrectAnswer, addPollAnswerText,
+  setPollSortPosition, addPollSubstitution,
 }) => {
   const params = new URLSearchParams(location.search);
   const type = params.get('type');
@@ -104,6 +107,8 @@ const PollCreate = React.memo(({
           setCorrectAnswer={setCorrectAnswer}
           addPollAnswerText={addPollAnswerText}
           createPoll={createPoll}
+          setPollSortPosition={setPollSortPosition}
+          addPollSubstitution={addPollSubstitution}
         />
       </Col>
       <Col xs="4">
@@ -130,5 +135,7 @@ export default connect(mapStateToProps, {
   addPollAnswer,
   setCorrectAnswer,
   addPollAnswerText,
+  setPollSortPosition,
+  addPollSubstitution,
   createPoll: createPollRequest,
 })(PollCreate);

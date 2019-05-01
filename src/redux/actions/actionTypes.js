@@ -46,6 +46,8 @@ export const RESET_POLL_DATA = 'poll/RESET_POLL_DATA';
 export const ADD_POLL_ANSWER = 'poll/ADD_POLL_ANSWER';
 export const ADD_POLL_ANSWER_TEXT = 'poll/ADD_POLL_ANSWER_TEXT';
 export const SET_CORRECT_ANSWER = 'poll/SET_CORRECT_ANSWER';
+export const SET_POLL_SORT_POSITION = 'poll/SET_POLL_SORT_POSITION';
+export const ADD_POLL_SUBSTITUTION = 'poll/ADD_POLL_SUBSTITUTION';
 
 export const GET_POLL_REQUEST = 'poll/GET_POLL_REQUEST';
 export const GET_POLL_SUCCESS = 'poll/GET_POLL_SUCCESS';

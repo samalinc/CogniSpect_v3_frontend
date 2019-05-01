@@ -2,7 +2,7 @@ import API from 'utils/axiosClient';
 
 export async function loadUsers(payload) {
   try {
-    return API.get('account/filter');
+    return API.get('user');
   } catch (error) {
     throw error;
   }

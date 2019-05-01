@@ -30,4 +30,7 @@ export { default as PollCreateForm } from './Polls/PollCreateForm';
 export { default as PollAnswers } from './Polls/PollAnswers';
 export { default as AnswerInput } from './Polls/PollAnswers/AnswerInput';
 export { default as AddAnswer } from './Polls/AddAnswer';
+export { default as PreferenceOrderAnswers } from './Polls/PollAnswers/PreferenceOrderAnswers';
+export { default as MatchPollAnswers } from './Polls/PollAnswers/MatchPollAnswers';
+export { default as SubstitutionAnswers } from './Polls/PollAnswers/SubstitutionAnswers';
 

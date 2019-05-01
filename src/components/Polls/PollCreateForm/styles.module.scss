@@ -12,3 +12,19 @@
     justify-content: space-between;
     margin: 0 auto 25px  auto;
 }
+.addAnswer {
+    border: 1px black dashed;
+    padding: 7px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    line-height: 1.5;
+    color: grey;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 170ms ease-in;
+    width: 100%;
+    // max-width: 330px;
+    &:hover {
+      color: white;
+    }
+  }
