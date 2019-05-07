@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   PollTypes,
@@ -95,11 +95,19 @@ const PollCreate = React.memo(({
       value,
     });
   };
+
+  useEffect(() => {
+    setPollData({
+      name: 'type',
+      value: type,
+    });
+  });
   return (
     <Row>
       <Col xs="8">
         <PollCreateForm
           poll={poll}
+          type={type}
           onDataChange={onDataChange}
           resetData={resetPollData}
           colourStyles={colourStyles}

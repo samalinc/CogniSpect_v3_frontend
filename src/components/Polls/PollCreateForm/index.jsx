@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -20,15 +20,17 @@ import CreatableSelect from 'react-select/lib/Creatable';
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import { getPoll } from 'redux/sagas/poll/selectors';
+import { setSubstitutionTemplate } from 'redux/actions/poll';
 import styles from './styles.module.scss';
 
 const PollCreateForm = React.memo(({
   onDataChange, colourStyles, addPollAnswer,
   poll, setCorrectAnswer, addPollAnswerText,
   createPoll, setPollSortPosition, addPollSubstitution,
+  type, setSubstitutionTemplate,
 }) => {
   const getPollAnswers = (rest) => {
-    switch (poll.type) {
+    switch (type) {
     case 'SORT': {
       return (
         poll.sortAnswers.map((answer, iterator) => {
@@ -99,6 +101,20 @@ const PollCreateForm = React.memo(({
     }
   };
 
+  const [description, setDesciption] = useState('');
+
+  const setDesciptionValue = (event) => {
+    setDesciption(event.target.value);
+    onDataChange(event);
+  };
+
+  const addSubstitutionTemplate = () => {
+    if (!description.split('%').find((word) => { return word === 'substitution'; })) {
+      setDesciption(`${description}%substitution%`);
+    }
+    setSubstitutionTemplate();
+  };
+
   return (
     <Fragment>
       <Card>
@@ -110,20 +126,22 @@ const PollCreateForm = React.memo(({
           <CardBody>
             <Label>Description</Label>
             <Input
-              onChange={onDataChange}
+              onChange={setDesciptionValue}
               className="mb-2"
               required
               rows="5"
+              value={description}
               name="description"
               placeholder="Description"
               type="textarea"
             />
             {
-              poll.type === 'SUBSTITUTION' && (
+              type === 'SUBSTITUTION' && (
                 <Col className="pl-0 mb-2 mt-2">
                   <Button
                     type="button"
                     className="btn btn-success"
+                    onClick={addSubstitutionTemplate}
                   >
                     {'Add substitution'}
                   </Button>
@@ -162,8 +180,9 @@ const PollCreateForm = React.memo(({
                 poll.substitutions.map((substitution) => {
                   return (
                     <Input
-                      onKeyUp={(event) => { console.log(event.target.selectionStart); }}
-                      onMouseDown={(event) => { console.log(event.target.selectionEnd); }}
+                      // onKeyUp={(event) => { console.log(event.target.selectionStart); }}
+                      // onMouseDown={(event) => { console.log(event.target.selectionEnd); }}
+                      // onChange={}
                       placeholder="Substitution"
                       className="mb-2"
                       defaultValue={substitution.text}
@@ -173,7 +192,7 @@ const PollCreateForm = React.memo(({
                 })
               }
               {
-                poll.type === 'SUBSTITUTION' && (
+                type === 'SUBSTITUTION' && (
                   <div
                     onClick={addPollSubstitution}
                     className={styles.addAnswer}
@@ -206,4 +225,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   showModal,
+  setSubstitutionTemplate,
 })(PollCreateForm);

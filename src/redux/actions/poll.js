@@ -132,3 +132,17 @@ export const addPollAnswerText = (payload) => {
   };
 };
 
+export const setSubstitutionTemplate = (payload) => {
+  return {
+    type: types.SET_SUBSTITUTION_TEMPLATE,
+    payload,
+  };
+};
+
+export const setSubstitutionText = (payload) => {
+  return {
+    type: types.SET_SUBSTITUTION_TEXT,
+    payload,
+  };
+};
+

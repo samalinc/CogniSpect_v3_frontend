@@ -107,6 +107,7 @@ export default combineReducers({
     case types.ADD_POLL_ANSWER_TEXT: {
       switch (state.type) {
       case 'MULTICHOOSE':
+      case 'SUBSTITUTION':
       case 'CHOOSE': {
         return merge({}, state, {
           answers: state.answers.find((answer, index, array) => {
@@ -140,7 +141,14 @@ export default combineReducers({
       default: return state;
       }
     }
-
+    case types.SET_SUBSTITUTION_TEMPLATE: {
+      if (!state.description.split('%').find((word) => { return word === 'substitution'; })) {
+        return Object.assign({}, state, {
+          description: `${state.description}%substitution%`,
+        });
+      }
+      return state;
+    }
     case types.ADD_POLL_SUBSTITUTION: {
       return Object.assign({}, state, {
         substitutions: [...state.substitutions, {
@@ -183,10 +191,27 @@ export default combineReducers({
         });
         break;
       }
+      case 'SUBSTITUTION': {
+        newAnswers.forEach((answer, index) => {
+          if (index === action.payload) {
+            return answer.correct = true;
+          }
+        });
+        break;
+      }
+
       default: return null;
       }
 
       return Object.assign({}, state, { answers: newAnswers });
+    }
+
+    case types.SET_SUBSTITUTION_TEXT: {
+      substitutions.forEach((answer, index) => {
+        if (index === action.payload.index) {
+
+        }
+      });
     }
     default:
       return state;
