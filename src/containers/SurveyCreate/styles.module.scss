@@ -1,0 +1,33 @@
+.container {
+    padding: 13px;
+  }
+  .cardHeader {
+      display: flex !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      z-index: 100;
+      align-items: center;
+      border-left: 1px solid #23282c !important;
+    
+      input {
+        width: 100%;
+        max-width: 750px;
+      }
+    }
+    .th {
+
+      font-weight: 400;
+    }
+    .actions{ 
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+      input {
+        width: 100%;
+        max-width: 150px;
+      }
+    }
+    .description {
+      max-width: 300px;
+    }

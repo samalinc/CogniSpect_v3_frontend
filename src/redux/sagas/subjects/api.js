@@ -1,8 +1,8 @@
 import API from 'utils/axiosClient';
 
-export async function loadTopics(query) {
+export async function loadSubjects(query) {
   try {
-    return API.get('topic', {
+    return API.get('subject', {
       params: query,
     });
   } catch (error) {
@@ -10,25 +10,25 @@ export async function loadTopics(query) {
   }
 }
 
-export async function createTopic(data) {
+export async function createSubject(data) {
   try {
-    return API.post('topic', data);
+    return API.post('subject', data);
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateTopic(data) {
+export async function updateSubject(data) {
   try {
-    return API.put('topic', data);
+    return API.put('subject', data);
   } catch (error) {
     throw error;
   }
 }
 
-export async function getTopic(id) {
+export async function getSubject(id) {
   try {
-    return API.get('topic', {
+    return API.get('subject', {
       params: {
         id,
       },

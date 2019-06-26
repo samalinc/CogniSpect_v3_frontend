@@ -26,9 +26,10 @@ import {
 } from './api';
 import { getCurrentTopic } from './selectors';
 
-function* callLoadTopics({ payload: { query } }) {
+function* callLoadTopics({ payload }) {
+  console.log(payload);
   try {
-    const response = yield call(loadTopics, query);
+    const response = yield call(loadTopics, payload);
     return yield put(loadTopicsSuccess(response.data));
   } catch (error) {
     return yield put(loadTopicsFailure(error));
@@ -37,8 +38,8 @@ function* callLoadTopics({ payload: { query } }) {
 
 function* callCreateTopic() {
   try {
-    const user = yield select(getCurrentTopic);
-    const response = yield call(createTopic, user);
+    const topic = yield select(getCurrentTopic);
+    const response = yield call(createTopic, topic);
     return yield put(createTopicSuccess(response.data));
   } catch (error) {
     return yield put(createTopicFailure(error));
@@ -47,8 +48,8 @@ function* callCreateTopic() {
 
 function* callUpdateTopic() {
   try {
-    const user = yield select(getCurrentTopic);
-    const response = yield call(updateTopic, user);
+    const topic = yield select(getCurrentTopic);
+    const response = yield call(updateTopic, topic);
     return yield put(updateTopicSuccess(response.data));
   } catch (error) {
     return yield put(updateTopicFailure(error));

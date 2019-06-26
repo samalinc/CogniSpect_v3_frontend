@@ -20,9 +20,10 @@ import {
   loadPollsRequest,
 } from 'redux/actions/poll';
 import { getPolls } from 'redux/sagas/poll/selectors';
+import { AppSwitch } from '@coreui/react';
 import styles from './styles.module.scss';
 
-class Polls extends Component {
+class SurveyCreate extends Component {
   constructor(props) {
     super(props);
 
@@ -39,8 +40,9 @@ class Polls extends Component {
     loadPolls({
       page: 0,
       pageSize: ITEM_PER_PAGE,
-    });
-  }
+    }); 
+}
+
 
   editPoll = (id) => {
   }
@@ -96,10 +98,10 @@ class Polls extends Component {
         <CardHeader className={styles.cardHeader}>
           <div>
             <i className="fa fa-align-justify mr-3" />
-            <strong className="mr-4">Polls</strong>
+            <strong className="mr-4">New Survey</strong>
           </div>
           <Input
-            placeholder="Search"
+            placeholder="Survey title"
             name="user"
             onChange={this.onChange}
             style={{ marginRight: 'auto' }}
@@ -108,7 +110,7 @@ class Polls extends Component {
             onClick={this.createUser}
             color="success"
           >
-              Create new poll
+              Create new survey
           </Button>
         </CardHeader>
         <Loader loaded={!polls.isLoading}>
@@ -140,24 +142,25 @@ class Polls extends Component {
                               <th scope="row">{poll.topic.name || '-'}</th>
                               <th scope="row">{poll.topic.subject.name || '-'}</th>
                               <th scope="row">{poll.type || '-'}</th>
-                              <th scope="row">{poll.description || '-'}</th>
+                              <th className={styles.description} scope="row">{poll.description || '-'}</th>
                               <th scope="row">
-                                <Button
-                                //   onClick={() => { return this.chooseConference(meeting.id); }}
-                                  color="primary"
-                                  outline
-                                  style={{ marginRight: '10px' }}
-                                >
-                                 View
-                                </Button>
-                                <Button
-                                  onClick={() => { return this.removeMeeting(meeting.id, meeting.title); }}
-                                  icon="cui-delete"
-                                  outline
-                                  color="danger"
-                                >
-                                  Delete
-                                </Button>
+                                <div className={styles.actions}>
+                                  <Input
+                                    placeholder="Question cost"
+                                    type="text"
+                                    name="questionCost"
+                                  />
+                                  <AppSwitch
+                                    //   onChange={() => { return setCorrectAnswer(iterator); }}
+                                    name="isCorrect"
+                                    variant="pill"
+                                    color="success"
+                                    className={styles.switch}
+                                    label
+                                    dataOn={'\u2713'}
+                                    dataOff={'\u2715'}
+                                  />
+                                </div>
                               </th>
                             </tr>
                           );
@@ -189,4 +192,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   showModal,
   loadPolls: loadPollsRequest,
-})(Polls);
+})(SurveyCreate);

@@ -117,6 +117,7 @@ const PollCreate = React.memo(({
           createPoll={createPoll}
           setPollSortPosition={setPollSortPosition}
           addPollSubstitution={addPollSubstitution}
+          setPollData={setPollData}
         />
       </Col>
       <Col xs="4">

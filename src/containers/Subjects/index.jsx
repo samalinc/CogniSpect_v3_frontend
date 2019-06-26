@@ -6,6 +6,7 @@ import {
   CardBody,
   Input,
   Button,
+  Label,
 } from 'reactstrap';
 import {
   Loader,
@@ -17,50 +18,38 @@ import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import { ITEM_PER_PAGE } from 'utils/constants';
 import {
-  loadPollsRequest,
-} from 'redux/actions/poll';
-import { getPolls } from 'redux/sagas/poll/selectors';
+  loadSubjectsRequest,
+  createSubjectRequest,
+  // removeTopicRequest,
+  updateSubjectRequest,
+  getSubjectRequest,
+  setSubjectData,
+} from 'redux/actions/subject';
+import {
+  getSubjects,
+  getCurrentSubject,
+} from 'redux/sagas/subjects/selectors';
 import styles from './styles.module.scss';
 
-class Polls extends Component {
+class Subjects extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       page: 1,
     };
-    this.removePoll = ::this.removePoll;
+    this.deleteTopic = ::this.deleteTopic;
     this.onPageChange = ::this.onPageChange;
+    this.createSubject = ::this.createSubject;
   }
 
   componentDidMount() {
-    const { loadPolls } = this.props;
+    const { loadSubjects } = this.props;
 
-    loadPolls({
+    loadSubjects({
       page: 0,
       pageSize: ITEM_PER_PAGE,
     });
-  }
-
-  editPoll = (id) => {
-  }
-
-  removePoll(meetingId, meetingName) {
-    const {
-      showModal,
-      deleteConfernce,
-    } = this.props;
-
-    showModal(
-      'CONFIRM_MODAL',
-      {
-        title: 'Remove poll',
-        confirmButtonTitle: 'Confirm',
-        confirmAction: () => { deleteConfernce(meetingId); },
-        message: (<h4>{`Remove ${meetingName} ?`}</h4>),
-        type: 'danger',
-      },
-    );
   }
 
   onPageChange(current) {
@@ -83,20 +72,102 @@ class Polls extends Component {
     });
   }
 
+  createSubject = (topicId, topicName) => {
+    return () => {
+      const {
+        showModal,
+        createSubject,
+        setSubjectData,
+        subject,
+      } = this.props;
+
+      showModal(
+        'CONFIRM_MODAL',
+        {
+          title: 'Remove poll',
+          confirmButtonTitle: 'Confirm',
+          confirmAction: () => { createSubject(); },
+          message: (
+            <div>
+              <Label>Subject name</Label>
+              <Input
+                defaultValue={subject.name}
+                name="subject"
+                placeholder="Subject name"
+                onChange={(event) => { return setSubjectData(event.target.value); }}
+              />
+            </div>),
+          type: 'primary',
+        },
+      );
+    };
+  }
+
+  deleteTopic(topicId, topicName) {
+    const {
+      showModal,
+      removeTopic,
+    } = this.props;
+
+    showModal(
+      'CONFIRM_MODAL',
+      {
+        title: 'Remove poll',
+        confirmButtonTitle: 'Confirm',
+        confirmAction: () => { removeTopic(topicId); },
+        message: (<h4>{`Remove ${topicName} ?`}</h4>),
+        type: 'danger',
+      },
+    );
+  }
+
+  async editSubject(id) {
+    const {
+      showModal,
+      updateTopic,
+      getSubject,
+      setSubjectData,
+      subject,
+    } = this.props;
+
+    const temp = await getSubject(id);
+    console.log(subject, temp);
+
+    showModal(
+      'CONFIRM_MODAL',
+      {
+        title: 'Remove poll',
+        confirmButtonTitle: 'Confirm',
+        confirmAction: () => { updateTopic(); },
+        message: (
+          <div>
+            <Label>Subject name</Label>
+            <Input
+              defaultValue={subject.name}
+              name="subject"
+              placeholder="Subject name"
+              onChange={(event) => { return setSubjectData(event.target.value); }}
+            />
+          </div>),
+        type: 'primary',
+      },
+    );
+  }
+
   render() {
     const {
       history,
-      polls,
+      subjects,
     } = this.props;
     const { page } = this.state;
-
     const pageNumber = history.location.search.split('');
+
     return (
       <Card>
         <CardHeader className={styles.cardHeader}>
           <div>
             <i className="fa fa-align-justify mr-3" />
-            <strong className="mr-4">Polls</strong>
+            <strong className="mr-4">Subjects</strong>
           </div>
           <Input
             placeholder="Search"
@@ -105,15 +176,15 @@ class Polls extends Component {
             style={{ marginRight: 'auto' }}
           />
           <Button
-            onClick={this.createUser}
+            onClick={this.createSubject()}
             color="success"
           >
-              Create new poll
+              Create new subject
           </Button>
         </CardHeader>
-        <Loader loaded={!polls.isLoading}>
+        <Loader loaded={!subjects.isLoading}>
           {
-            polls.items.length === 0 ? <Placeholder text="Sorry, no content!" />
+            subjects.items.length === 0 ? <Placeholder text="Sorry, no content!" />
               : (
                 <CardBody>
                   <Table
@@ -124,26 +195,20 @@ class Polls extends Component {
                     <thead>
                       <tr>
                         <th>Id</th>
-                        <th>Topic</th>
                         <th>Subject</th>
-                        <th>Type</th>
-                        <th>Description</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody style={{ fontWeight: 'normal' }}>
                       {
-                        polls.items.map(((poll, index) => {
+                        subjects.items.map(((topic, index) => {
                           return (
-                            <tr key={poll.id}>
+                            <tr key={topic.id}>
                               <th scope="row">{index}</th>
-                              <th scope="row">{poll.topic.name || '-'}</th>
-                              <th scope="row">{poll.topic.subject.name || '-'}</th>
-                              <th scope="row">{poll.type || '-'}</th>
-                              <th scope="row">{poll.description || '-'}</th>
+                              <th scope="row">{topic.name || '-'}</th>
                               <th scope="row">
                                 <Button
-                                //   onClick={() => { return this.chooseConference(meeting.id); }}
+                                  onClick={() => { return this.editSubject(topic.id); }}
                                   color="primary"
                                   outline
                                   style={{ marginRight: '10px' }}
@@ -151,7 +216,7 @@ class Polls extends Component {
                                  View
                                 </Button>
                                 <Button
-                                  onClick={() => { return this.removeMeeting(meeting.id, meeting.title); }}
+                                  onClick={() => { return this.deleteTopic(topic.id, topic.name); }}
                                   icon="cui-delete"
                                   outline
                                   color="danger"
@@ -182,11 +247,17 @@ class Polls extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    polls: getPolls(state),
+    subjects: getSubjects(state),
+    subject: getCurrentSubject(state),
   };
 };
 
 export default connect(mapStateToProps, {
   showModal,
-  loadPolls: loadPollsRequest,
-})(Polls);
+  loadSubjects: loadSubjectsRequest,
+  getSubject: getSubjectRequest,
+  createSubject: createSubjectRequest,
+  // removeTopic: removeSubjectRequest,
+  updateSubject: updateSubjectRequest,
+  setSubjectData,
+})(Subjects);

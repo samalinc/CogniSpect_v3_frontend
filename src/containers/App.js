@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import {
   Switch,
   Route,
-  Redirect,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cookieStorage from 'utils/cookie';
@@ -16,6 +15,8 @@ import {
   PollCreate,
   Polls,
   Topics,
+  SurveyCreate,
+  Subjects,
 } from 'containers';
 import Login from 'containers/Login';
 import NotFound from 'containers/NotFound';
@@ -86,12 +87,32 @@ class App extends Component {
           )}
         />
         <PrivateRoute
+          path="/surveys/new"
+          exact
+          isAuth={isAuth}
+          component={(
+            <DefaultLayout>
+              <SurveyCreate {...this.props} />
+            </DefaultLayout>
+          )}
+        />
+        <PrivateRoute
           path="/polls"
           exact
           isAuth={isAuth}
           component={(
             <DefaultLayout>
               <Polls {...this.props} />
+            </DefaultLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/subjects"
+          exact
+          isAuth={isAuth}
+          component={(
+            <DefaultLayout>
+              <Subjects {...this.props} />
             </DefaultLayout>
           )}
         />

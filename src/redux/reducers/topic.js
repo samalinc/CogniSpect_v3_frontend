@@ -25,12 +25,17 @@ function topic(state = initialState, action) {
       isLoading: false,
       error: action.payload,
     }); }
-
+  case types.CREATE_TOPIC_SUCCESS: {
+    return Object.assign({}, state, {
+      isLoading: false,
+      items: [...state.items, action.payload],
+    });
+  }
   case types.LOAD_TOPICS_SUCCESS: {
     return Object.assign({}, state, {
       isLoading: false,
-      items: action.payload,
-      total: action.payload.length,
+      items: action.payload.content,
+      total: action.payload.totalElements,
     }); }
 
   case types.REMOVE_TOPIC_SUCCESS: {
@@ -59,9 +64,7 @@ function topic(state = initialState, action) {
 
 const currentTopicInitialState = {
   name: '',
-  subject: {
-    name: '',
-  },
+  subjectId: '',
   isLoading: true,
   error: false,
 };
@@ -77,15 +80,6 @@ export default combineReducers({
         return Object.assign({}, state, {
           name: action.payload.value,
         });
-      }
-      if (action.payload.name === 'subject') {
-        return {
-          ...state,
-          subject: {
-            ...state.subject,
-            name: action.payload.value,
-          },
-        };
       }
       return Object.assign({}, state, {
         [action.payload.name]: action.payload.value,

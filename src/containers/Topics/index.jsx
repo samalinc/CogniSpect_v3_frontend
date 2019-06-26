@@ -25,10 +25,12 @@ import {
   getTopicRequest,
   setTopicData,
 } from 'redux/actions/topic';
+import { loadSubjectsRequest } from 'redux/actions/subject';
 import {
   getTopics,
   getCurrentTopic,
 } from 'redux/sagas/topic/selectors';
+import { getSubjects } from 'redux/sagas/subjects/selectors';
 import styles from './styles.module.scss';
 
 class Topics extends Component {
@@ -38,18 +40,27 @@ class Topics extends Component {
     this.state = {
       page: 1,
     };
-    this.deleteTopic = ::this.deleteTopic;
+    // this.deleteTopic = ::this.deleteTopic;
     this.onPageChange = ::this.onPageChange;
     this.createTopic = ::this.createTopic;
   }
 
   componentDidMount() {
-    const { loadTopics } = this.props;
+    const {
+      loadTopics,
+      loadSubjects,
+    } = this.props;
 
-    loadTopics({});
+    loadSubjects({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
+
+    loadTopics({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
   }
-
-
 
   onPageChange(current) {
     const {
@@ -71,23 +82,23 @@ class Topics extends Component {
     });
   }
 
-  deleteTopic(topicId, topicName) {
-    const {
-      showModal,
-      removeTopic,
-    } = this.props;
+  // deleteTopic(topicId, topicName) {
+  //   const {
+  //     showModal,
+  //     removeTopic,
+  //   } = this.props;
 
-    showModal(
-      'CONFIRM_MODAL',
-      {
-        title: 'Remove poll',
-        confirmButtonTitle: 'Confirm',
-        confirmAction: () => { removeTopic(topicId); },
-        message: (<h4>{`Remove ${topicName} ?`}</h4>),
-        type: 'danger',
-      },
-    );
-  }
+  //   showModal(
+  //     'CONFIRM_MODAL',
+  //     {
+  //       title: 'Remove poll',
+  //       confirmButtonTitle: 'Confirm',
+  //       confirmAction: () => { removeTopic(topicId); },
+  //       message: (<h4>{`Remove ${topicName} ?`}</h4>),
+  //       type: 'danger',
+  //     },
+  //   );
+  // }
 
   createTopic = (topicId, topicName) => {
     return () => {
@@ -96,6 +107,7 @@ class Topics extends Component {
         createTopic,
         setTopicData,
         topic,
+        subjects,
       } = this.props;
 
       showModal(
@@ -117,11 +129,17 @@ class Topics extends Component {
               <Label>Subject name</Label>
               <Input
                 type="select"
-                defaultValue={topic.subject.name}
-                name="subject"
+                name="subjectId"
                 placeholder="Subject name"
                 onChange={(event) => { return setTopicData({ name: event.target.name, value: event.target.value }); }}
-              />
+              >
+                <option>Choose subject</option>
+                {
+                  subjects.map((subject) => {
+                    return <option value={subject.id} key={subject.id}>{subject.name}</option>;
+                  })
+                }
+              </Input>
             </div>),
           type: 'primary',
         },
@@ -137,6 +155,7 @@ class Topics extends Component {
       setTopicData,
       topic,
     } = this.props;
+
     getTopic(id);
     showModal(
       'CONFIRM_MODAL',
@@ -157,11 +176,18 @@ class Topics extends Component {
             <Label>Subject name</Label>
             <Input
               type="select"
-              defaultValue={topic.subject.name}
+              // defaultValue={topic.subject.name}
               name="subject"
               placeholder="Subject name"
               onChange={(event) => { return setTopicData({ name: event.target.name, value: event.target.value }); }}
-            />
+            >
+              <option>Choose subject</option>
+              {
+                subjects.map((subject) => {
+                  return <option key={subject.id}>{subject.name}</option>;
+                })
+              }
+            </Input>
           </div>),
         type: 'primary',
       },
@@ -263,7 +289,7 @@ class Topics extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    // subjects: getSubjects(state),
+    subjects: getSubjects(state).items,
     topics: getTopics(state),
     topic: getCurrentTopic(state),
   };
@@ -277,4 +303,5 @@ export default connect(mapStateToProps, {
   removeTopic: removeTopicRequest,
   updateTopic: updateTopicRequest,
   setTopicData,
+  loadSubjects: loadSubjectsRequest,
 })(Topics);

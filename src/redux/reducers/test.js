@@ -10,22 +10,22 @@ const initialState = {
   items: [],
 };
 
-function subjects(state = initialState, action) {
+function test(state = initialState, action) {
   switch (action.type) {
-  case types.UPDATE_SUBJECT_REQUEST:
-  case types.REMOVE_SUBJECT_REQUEST:
-  case types.LOAD_SUBJECTS_REQUEST: {
+  case types.REMOVE_TEST_REQUEST:
+  case types.UPDATE_TEST_REQUEST:
+  case types.LOAD_TESTS_REQUEST: {
     return Object.assign({}, state, {
       isLoading: true,
     }); }
-  case types.UPDATE_SUBJECT_FAILURE:
-  case types.REMOVE_SUBJECT_FAILURE:
-  case types.LOAD_SUBJECTS_FAILURE: {
+  case types.REMOVE_TEST_FAILURE:
+  case types.UPDATE_TEST_FAILURE:
+  case types.LOAD_TESTS_FAILURE: {
     return Object.assign({}, state, {
       isLoading: false,
       error: action.payload,
     }); }
-  case types.CREATE_SUBJECT_SUCCESS: {
+  case types.CREATE_TEST_SUCCESS: {
     return Object.assign({}, state, {
       isLoading: false,
       items: [...state.items, action.payload],
@@ -38,7 +38,7 @@ function subjects(state = initialState, action) {
       total: action.payload.totalElements,
     }); }
 
-  case types.REMOVE_SUBJECT_SUCCESS: {
+  case types.REMOVE_TEST_SUCCESS: {
     return Object.assign({}, state, {
       isLoading: false,
       items: action.payload.filter((topic) => {
@@ -46,7 +46,7 @@ function subjects(state = initialState, action) {
       }),
     }); }
 
-  case types.UPDATE_SUBJECT_SUCCESS: {
+  case types.UPDATE_TEST_SUCCESS: {
     return Object.assign({}, state, {
       isLoading: false,
       items: action.payload.find((topic, index, array) => {
@@ -69,8 +69,8 @@ const currentTopicInitialState = {
 };
 
 export default combineReducers({
-  all: subjects,
-  currentSubject: single({
+  all: test,
+  currentTest: single({
     types: [types.GET_SUBJECT_SUCCESS, types.GET_SUBJECT_FAILURE, types.LOAD_SUBJECTS_REQUEST],
   })((state = currentTopicInitialState, action = {}) => {
     switch (action.type) {

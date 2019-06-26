@@ -18,8 +18,8 @@ function guests(state = initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: null,
-      items: action.payload,
-      total: action.payload.length,
+      items: action.payload.content,
+      total: action.payload.totalElements,
     }); }
 
   case types.CREATE_USER_FAILURE:

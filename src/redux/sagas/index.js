@@ -6,6 +6,7 @@ import * as authSaga from './auth';
 import * as users from './users';
 import * as polls from './poll';
 import * as topics from './topic';
+import * as subjects from './subjects';
 
 export default function* rootSaga() {
   yield all([
@@ -13,5 +14,6 @@ export default function* rootSaga() {
     ...Object.values(users),
     ...Object.values(polls),
     ...Object.values(topics),
+    ...Object.values(subjects),
   ].map(fork));
 }

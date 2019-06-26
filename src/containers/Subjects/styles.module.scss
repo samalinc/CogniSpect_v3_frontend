@@ -1,0 +1,18 @@
+.container {
+    padding: 13px;
+  }
+  .cardHeader {
+      display: flex !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      align-items: center;
+      border-left: 1px solid #23282c !important;
+    
+      input {
+        width: 100%;
+        max-width: 350px;
+      }
+    }
+    .th {
+      font-weight: 400;
+    }

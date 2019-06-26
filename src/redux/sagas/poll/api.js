@@ -1,8 +1,10 @@
 import API from 'utils/axiosClient';
 
-export async function loadPolls(payload) {
+export async function loadPolls({ payload }) {
   try {
-    return API.get('question');
+    return API.get('question', {
+      params: payload,
+    });
   } catch (error) {
     throw error;
   }

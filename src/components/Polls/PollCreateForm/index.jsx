@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   Card,
   CardHeader,
@@ -16,19 +16,40 @@ import {
   MatchPollAnswers,
   SubstitutionAnswers,
 } from 'components';
+import { loadSubjectsRequest } from 'redux/actions/subject';
+import { loadTopicsRequest } from 'redux/actions/topic';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import { getPoll } from 'redux/sagas/poll/selectors';
-import { setSubstitutionTemplate } from 'redux/actions/poll';
+import {
+  setSubstitutionTemplate,
+  setSubstitutionText,
+} from 'redux/actions/poll';
+import { getSubjects } from 'redux/sagas/subjects/selectors';
+import { getTopics } from 'redux/sagas/topic/selectors';
+import { ITEM_PER_PAGE } from 'utils/constants';
 import styles from './styles.module.scss';
 
 const PollCreateForm = React.memo(({
   onDataChange, colourStyles, addPollAnswer,
   poll, setCorrectAnswer, addPollAnswerText,
   createPoll, setPollSortPosition, addPollSubstitution,
-  type, setSubstitutionTemplate,
+  type, setSubstitutionTemplate, setSubstitutionText,
+  topics, subjects, loadSubjects, loadTopics, setPollData,
 }) => {
+  useEffect(() => {
+    loadSubjects({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
+
+    loadTopics({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
+  }, []);
+
   const getPollAnswers = (rest) => {
     switch (type) {
     case 'SORT': {
@@ -50,7 +71,7 @@ const PollCreateForm = React.memo(({
     case 'MULTICHOOSE':
     case 'CHOOSE': {
       return (
-        poll.answers.map((answer, iterator) => {
+        poll.chooseAnswers.map((answer, iterator) => {
           return (
             <AnswerInput
               index={iterator}
@@ -83,7 +104,7 @@ const PollCreateForm = React.memo(({
       );
     }
     case 'SUBSTITUTION': {
-      return poll.answers.map((answer, iterator) => {
+      return poll.chooseAnswers.map((answer, iterator) => {
         return (
           <SubstitutionAnswers
             index={iterator}
@@ -114,7 +135,7 @@ const PollCreateForm = React.memo(({
     }
     setSubstitutionTemplate();
   };
-
+  console.log(topics, subjects);
   return (
     <Fragment>
       <Card>
@@ -149,23 +170,32 @@ const PollCreateForm = React.memo(({
               )
             }
             <Label>Subject</Label>
-            <CreatableSelect
-              isClearable
-              // onChange={()}
-              // onInputChange={this.handleInputChange}
-              styles={colourStyles}
-              onCreateOption={() => { return console.log('create'); }}
-              // options={}
-            />
+            <Input
+              type="select"
+              name="subjectId"
+              onChange={(event) => { setPollData({ name: event.target.name, value: event.target.value }); }}
+            >
+              <option>Choose subject</option>
+              {
+                subjects.map((subject) => {
+                  return <option key={subject.id} value={subject.id}>{subject.name}</option>;
+                })
+              }
+            </Input>
             <Label>Topic</Label>
-            <CreatableSelect
-              isClearable
-              // onChange={()}
-              // onInputChange={this.handleInputChange}
-              styles={colourStyles}
-              onCreateOption={() => { return console.log('create'); }}
-              // options={}
-            />
+            <Input
+              type="select"
+              name="topicId"
+              onChange={(event) => { setPollData({ name: event.target.name, value: event.target.value }); }}
+            >
+              <option>Choose topic</option>
+              {
+                topics.map((topic) => {
+                  return <option key={topic.id} value={topic.id}>{topic.name}</option>;
+                })
+              }
+
+            </Input>
             <Label>Answers</Label>
             <div className={styles.answers}>
               {
@@ -177,12 +207,10 @@ const PollCreateForm = React.memo(({
               }
               <AddAnswer addPollAnswer={addPollAnswer} />
               {
-                poll.substitutions.map((substitution) => {
+                poll.substitutions.map((substitution, iterator) => {
                   return (
                     <Input
-                      // onKeyUp={(event) => { console.log(event.target.selectionStart); }}
-                      // onMouseDown={(event) => { console.log(event.target.selectionEnd); }}
-                      // onChange={}
+                      onChange={(event) => { return setSubstitutionText({ index: iterator, value: event.target.value }); }}
                       placeholder="Substitution"
                       className="mb-2"
                       defaultValue={substitution.text}
@@ -220,10 +248,15 @@ const PollCreateForm = React.memo(({
 const mapStateToProps = (state) => {
   return {
     poll: getPoll(state),
+    subjects: getSubjects(state).items,
+    topics: getTopics(state).items,
   };
 };
 
 export default connect(mapStateToProps, {
   showModal,
   setSubstitutionTemplate,
+  setSubstitutionText,
+  loadSubjects: loadSubjectsRequest,
+  loadTopics: loadTopicsRequest,
 })(PollCreateForm);

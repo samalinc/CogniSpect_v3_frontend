@@ -18,9 +18,9 @@ import {
 } from './api';
 import { getPoll } from './selectors';
 
-function* callLoadPolls({ payload: { query } }) {
+function* callLoadPolls(payload) {
   try {
-    const response = yield call(loadPolls, query);
+    const response = yield call(loadPolls, payload);
     return yield put(loadPollsSuccess(response.data));
   } catch (error) {
     return yield put(loadPollsFailure(error));

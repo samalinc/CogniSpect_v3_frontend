@@ -19,8 +19,8 @@ function poll(state = initialState, action) {
     return Object.assign({}, state, {
       isLoading: false,
       error: null,
-      items: action.payload,
-      total: action.payload.length,
+      items: action.payload.content,
+      total: action.payload.totalElements,
     }); }
 
   case types.LOAD_POLLS_FAILURE: {
@@ -35,7 +35,7 @@ function poll(state = initialState, action) {
 }
 
 const currentPollInitialState = {
-  answers: [{
+  chooseAnswers: [{
     text: '',
     correct: false,
   }],
@@ -48,12 +48,6 @@ const currentPollInitialState = {
   description: '',
   matchAnswers: [],
   substitutions: [],
-  topic: {
-    name: '1',
-    subject: {
-      name: '1',
-    },
-  },
   type: 'CHOOSE',
   isLoading: true,
   error: false,
@@ -79,7 +73,7 @@ export default combineReducers({
       case 'SUBSTITUTION':
       case 'CHOOSE': {
         return Object.assign({}, state, {
-          answers: [...state.answers, {
+          chooseAnswers: [...state.chooseAnswers, {
             text: '',
             correct: false,
           }],
@@ -107,13 +101,29 @@ export default combineReducers({
     case types.ADD_POLL_ANSWER_TEXT: {
       switch (state.type) {
       case 'MULTICHOOSE':
-      case 'SUBSTITUTION':
       case 'CHOOSE': {
         return merge({}, state, {
-          answers: state.answers.find((answer, index, array) => {
+          chooseAnswers: state.chooseAnswers.find((answer, index, array) => {
             if (index === action.payload.index) {
               array[index].text = action.payload.value;
               return array;
+            }
+          }),
+        });
+      }
+      case 'SUBSTITUTION': {
+        return merge({}, state, {
+          chooseAnswers: state.chooseAnswers.find((answer, index, array) => {
+            if (index === action.payload.index) {
+              array[index].text = action.payload.value;
+              return array;
+            }
+          }),
+          substitutions: state.substitutions.forEach((substitution, index) => {
+            const filteredAnswers = state.chooseAnswers.filter((answer) => { return answer.correct; });
+            console.log(filteredAnswers);
+            if (filteredAnswers[index]) {
+              substitution.rightAnswer.text = filteredAnswers[index].text;
             }
           }),
         });
@@ -154,7 +164,7 @@ export default combineReducers({
         substitutions: [...state.substitutions, {
           text: '',
           rightAnswer: {
-            correct: true,
+            correct: false,
             text: '',
           },
         }],
@@ -171,7 +181,7 @@ export default combineReducers({
       });
     }
     case types.SET_CORRECT_ANSWER: {
-      const newAnswers = state.answers;
+      const newAnswers = state.chooseAnswers;
       switch (state.type) {
       case 'CHOOSE': {
         newAnswers.forEach((answer, index) => {
@@ -194,7 +204,14 @@ export default combineReducers({
       case 'SUBSTITUTION': {
         newAnswers.forEach((answer, index) => {
           if (index === action.payload) {
-            return answer.correct = true;
+            answer.correct = true;
+          }
+        });
+        state.substitutions.forEach((substitution, index) => {
+          const filteredAnswers = state.chooseAnswers.filter((answer) => { return answer.correct; });
+          if (filteredAnswers[index]) {
+            substitution.rightAnswer.correct = true;
+            substitution.rightAnswer.text = filteredAnswers[index].text;
           }
         });
         break;
@@ -203,14 +220,17 @@ export default combineReducers({
       default: return null;
       }
 
-      return Object.assign({}, state, { answers: newAnswers });
+      return Object.assign({}, state, { chooseAnswers: newAnswers });
     }
 
     case types.SET_SUBSTITUTION_TEXT: {
-      substitutions.forEach((answer, index) => {
-        if (index === action.payload.index) {
-
-        }
+      return merge({}, state, {
+        substitutions: state.substitutions.find((answer, index, array) => {
+          if (index === action.payload.index) {
+            array[index].text = action.payload.value;
+            return array;
+          }
+        }),
       });
     }
     default:
