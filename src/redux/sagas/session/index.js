@@ -8,7 +8,6 @@ import {
 import {
   createVariantSuccess,
   createVariantFailure,
-  removeVariantSuccess,
   removeVariantFailure,
   updateVariantSuccess,
   updateVariantFailure,
