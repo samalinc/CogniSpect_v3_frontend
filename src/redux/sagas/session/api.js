@@ -1,8 +1,8 @@
 import API from 'utils/axiosClient';
 
-export async function loadTests(query) {
+export async function loadSessions(query) {
   try {
-    return API.get('testTemplate', {
+    return API.get('testSession', {
       params: query,
     });
   } catch (error) {
@@ -10,25 +10,25 @@ export async function loadTests(query) {
   }
 }
 
-export async function createTest(data) {
+export async function createSession(data) {
   try {
-    return API.post('testTemplate', data);
+    return API.post('testSession', data);
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateTest(data) {
+export async function updateSession(data) {
   try {
-    return API.put('testTemplate', data);
+    return API.put('testSession', data);
   } catch (error) {
     throw error;
   }
 }
 
-export async function getTest(id) {
+export async function getSession(id) {
   try {
-    return API.get('testTemplate', {
+    return API.get('testSession', {
       params: {
         id,
       },

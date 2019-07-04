@@ -1,8 +1,15 @@
 import * as types from './actionTypes';
 
-export const setSubjectData = (payload) => {
+export const setTestData = (payload) => {
   return {
     type: types.SET_TEST_DATA,
+    payload,
+  };
+};
+
+export const addPoll = (payload) => {
+  return {
+    type: types.ADD_POLL,
     payload,
   };
 };
@@ -84,7 +91,7 @@ export const getTestSuccess = (payload) => {
   };
 };
 
-export const getSubjectFailure = (payload) => {
+export const getTestFailure = (payload) => {
   return {
     type: types.GET_TEST_FAILURE,
     payload,

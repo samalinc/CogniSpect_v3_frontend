@@ -1,66 +1,102 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import {
   Table,
   Card,
   CardHeader,
   CardBody,
-  Input,
   Button,
-  Label,
   Container,
 } from 'reactstrap';
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import { ITEM_PER_PAGE } from 'utils/constants';
 import {
-  loadTestsRequest,
-  removeTestRequest,
-  updateTestRequest,
-  getTestRequest,
-} from 'redux/actions/test';
+  loadVariantsRequest,
+  removeVariantRequest,
+  updateVariantRequest,
+  getVariantRequest,
+  createVariantRequest,
+} from 'redux/actions/variants';
+import { getSessions } from 'redux/sagas/session/selectors';
+import {
+  Loader,
+  Placeholder,
+  SessionCreateModal,
+  Paginate,
+} from 'components';
+import { loadUsersRequest } from 'redux/actions/users';
+import { loadTestsRequest } from 'redux/actions/test';
 import { getTests } from 'redux/sagas/test/selectors';
-import { Loader, Placeholder, Paginate } from 'components';
 import styles from './styles.module.scss';
 
-class Survey extends Component {
+class Variants extends Component {
   componentDidMount() {
     const {
+      loadSessions,
+      loadUsers,
       loadTests,
     } = this.props;
 
+    loadSessions({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
+    loadUsers({
+      page: 0,
+      pageSize: ITEM_PER_PAGE,
+    });
     loadTests({
       page: 0,
       pageSize: ITEM_PER_PAGE,
     });
   }
 
+  createSession = () => {
+    const {
+      props: {
+        showModal,
+        createSession,
+      },
+    } = this;
+    showModal(
+      'CONFIRM_MODAL',
+      {
+        title: 'Create session',
+        confirmButtonTitle: 'Confirm',
+        confirmAction: () => { createSession(); },
+        message: <SessionCreateModal />,
+        type: 'primary',
+      },
+    );
+  }
+
   render() {
     const {
       history,
       tests,
+      sessions,
     } = this.props;
-    console.log(tests);
+
     return (
       <Container>
         <Card>
           <CardHeader className={styles.cardHeader}>
             <div>
               <i className="fa fa-align-justify mr-3" />
-              <strong className="mr-4">Test templates</strong>
+              <strong className="mr-4">Sessions</strong>
             </div>
             <Button
               type="button"
               color="success"
-              onClick={() => { return history.push('/surveys/new'); }}
+              onClick={this.createSession}
               className="ml-auto"
             >
-            Create test template
+            Create session
             </Button>
           </CardHeader>
-          <Loader loaded={!tests.isLoading}>
+          <Loader loaded={!sessions.isLoading}>
             {
-              tests.items.length === 0 ? <Placeholder text="Sorry, no content!" />
+              sessions.items.length === 0 ? <Placeholder text="Sorry, no content!" />
                 : (
                   <CardBody>
                     <Table
@@ -72,23 +108,24 @@ class Survey extends Component {
                         <tr>
                           <th>Id</th>
                           <th>Name</th>
-                          <th>Creator name</th>
-                          <th>Creator role</th>
+                          <th>Routers</th>
+                          <th>Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody style={{ fontWeight: 'normal' }}>
                         {
-                          tests.items.map(((test, index) => {
+                          sessions.items.map(((session, index) => {
                             return (
-                              <tr key={test.id}>
+                              <tr key={session.id}>
                                 <th scope="row">{index}</th>
-                                <th scope="row">{test.name || '-'}</th>
-                                <th scope="row">{test.creator.firstName || '-'}</th>
-                                <th scope="row">{test.creator.account.role || '-'}</th>
+                                <th scope="row">{session.name || '-'}</th>
+                                <th scope="row">{session.routers.join(',') || '-'}</th>
+                                <th scope="row">{session.status || '-'}</th>
+                                {/* <th scope="row">{test.creator.account.role || '-'}</th> */}
                                 <th scope="row">
                                   <Button
-                                    onClick={() => { return this.editTopic(test.id); }}
+                                    onClick={() => { return this.editTopic(session.id); }}
                                     color="primary"
                                     outline
                                     style={{ marginRight: '10px' }}
@@ -96,7 +133,7 @@ class Survey extends Component {
                                    View
                                   </Button>
                                   <Button
-                                    onClick={() => { return this.deleteTopic(test.id, topic.name); }}
+                                    onClick={() => { return this.deleteTopic(session.id, session.name); }}
                                     icon="cui-delete"
                                     outline
                                     color="danger"
@@ -128,13 +165,17 @@ class Survey extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    sessions: getSessions(state),
     tests: getTests(state),
   };
 };
 
 export default connect(mapStateToProps, {
   showModal,
-  removeTopic: removeTestRequest,
-  updateTopic: updateTestRequest,
+  removeSession: removeVariantRequest,
+  updateSession: updateVariantRequest,
+  loadSessions: loadVariantsRequest,
+  loadUsers: loadUsersRequest,
   loadTests: loadTestsRequest,
-})(Survey);
+  createSession: createVariantRequest,
+})(Variants);

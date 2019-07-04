@@ -12,7 +12,6 @@ import * as types from 'redux/actions/actionTypes';
 import cookieStorage from 'utils/cookie';
 import {
   login,
-  logout,
 } from './api';
 
 const cookie = cookieStorage();
@@ -22,6 +21,7 @@ function* callLogin({ payload: { data, redirect } }) {
     const response = yield call(login, data);
     yield put(loginSuccess(response.data));
     cookie.setItem('authToken', response.data.authToken);
+    cookie.setItem('userId', response.data.user.id);
     redirect();
   } catch (error) {
     return yield put(authFailure(error));

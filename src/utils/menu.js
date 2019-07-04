@@ -83,6 +83,12 @@ export const mainNavigation = {
       url: '/questions/new?type=CHOOSE',
     },
     {
+      name: 'Sessions',
+      icon: 'fa icon-calendar',
+      exact: true,
+      url: '/sessions',
+    },
+    {
       title: true,
       name: 'Settings',
     },

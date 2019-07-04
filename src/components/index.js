@@ -34,3 +34,8 @@ export { default as PreferenceOrderAnswers } from './Polls/PollAnswers/Preferenc
 export { default as MatchPollAnswers } from './Polls/PollAnswers/MatchPollAnswers';
 export { default as SubstitutionAnswers } from './Polls/PollAnswers/SubstitutionAnswers';
 
+
+// SESSIONS
+
+export { default as SessionCreateModal } from './Sessions/SessionCreateModal';
+

@@ -14,7 +14,6 @@ import {
   UserCreate,
   UserEdit,
 } from 'components';
-
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';

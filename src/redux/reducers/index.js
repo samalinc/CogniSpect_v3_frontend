@@ -7,6 +7,7 @@ import poll from './poll';
 import topic from './topic';
 import subjects from './subject';
 import test from './test';
+import session from './variant';
 
 export default combineReducers({
   app,
@@ -16,6 +17,7 @@ export default combineReducers({
   poll,
   topic,
   subjects,
+  session,
   test,
 });
 

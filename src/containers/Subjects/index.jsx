@@ -131,7 +131,6 @@ class Subjects extends Component {
     } = this.props;
 
     const temp = await getSubject(id);
-    console.log(subject, temp);
 
     showModal(
       'CONFIRM_MODAL',

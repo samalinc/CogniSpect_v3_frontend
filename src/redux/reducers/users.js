@@ -97,6 +97,11 @@ export default combineReducers({
     case types.UPDATE_USER_SUCCESS: {
       return Object.assign({}, currentGuestInitialState);
     }
+    case types.AUTH_USER_SUCCESS: {
+      return Object.assign({}, state, {
+        ...action.payload.user,
+      });
+    }
     case types.SET_USER_DATA: {
       return Object.assign({}, state, { [action.payload.name]: action.payload.value });
     }

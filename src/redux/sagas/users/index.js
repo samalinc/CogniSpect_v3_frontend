@@ -18,9 +18,9 @@ import {
 } from './api';
 import { getUser } from './selectors';
 
-function* callLoadUsers({ payload: { query } }) {
+function* callLoadUsers({ payload }) {
   try {
-    const response = yield call(loadUsers, query);
+    const response = yield call(loadUsers, payload);
     return yield put(loadUsersSuccess(response.data));
   } catch (error) {
     return yield put(loadUsersFailure(error));

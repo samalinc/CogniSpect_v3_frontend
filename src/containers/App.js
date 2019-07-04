@@ -17,6 +17,7 @@ import {
   Topics,
   SurveyCreate,
   Subjects,
+  Variants,
 } from 'containers';
 import Login from 'containers/Login';
 import NotFound from 'containers/NotFound';
@@ -103,6 +104,16 @@ class App extends Component {
           component={(
             <DefaultLayout>
               <Polls {...this.props} />
+            </DefaultLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/sessions"
+          exact
+          isAuth={isAuth}
+          component={(
+            <DefaultLayout>
+              <Variants {...this.props} />
             </DefaultLayout>
           )}
         />

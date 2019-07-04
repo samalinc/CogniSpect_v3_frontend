@@ -12,13 +12,18 @@ import {
   Placeholder,
   Paginate,
 } from 'components';
-
+import { getTests, getCurrentTest } from 'redux/sagas/test/selectors';
 import { showModal } from 'redux/actions/modal';
 import { connect } from 'react-redux';
 import { ITEM_PER_PAGE } from 'utils/constants';
 import {
   loadPollsRequest,
 } from 'redux/actions/poll';
+import {
+  setTestData,
+  addPoll,
+  createTestRequest,
+} from 'redux/actions/test';
 import { getPolls } from 'redux/sagas/poll/selectors';
 import { AppSwitch } from '@coreui/react';
 import styles from './styles.module.scss';
@@ -40,29 +45,7 @@ class SurveyCreate extends Component {
     loadPolls({
       page: 0,
       pageSize: ITEM_PER_PAGE,
-    }); 
-}
-
-
-  editPoll = (id) => {
-  }
-
-  removePoll(meetingId, meetingName) {
-    const {
-      showModal,
-      deleteConfernce,
-    } = this.props;
-
-    showModal(
-      'CONFIRM_MODAL',
-      {
-        title: 'Remove poll',
-        confirmButtonTitle: 'Confirm',
-        confirmAction: () => { deleteConfernce(meetingId); },
-        message: (<h4>{`Remove ${meetingName} ?`}</h4>),
-        type: 'danger',
-      },
-    );
+    });
   }
 
   onPageChange(current) {
@@ -85,10 +68,42 @@ class SurveyCreate extends Component {
     });
   }
 
+
+  removePoll(meetingId, meetingName) {
+    const {
+      showModal,
+      deleteConfernce,
+    } = this.props;
+
+    showModal(
+      'CONFIRM_MODAL',
+      {
+        title: 'Remove poll',
+        confirmButtonTitle: 'Confirm',
+        confirmAction: () => { deleteConfernce(meetingId); },
+        message: (<h4>{`Remove ${meetingName} ?`}</h4>),
+        type: 'danger',
+      },
+    );
+  }
+
+  createTest = () => {
+    const {
+      props: {
+        createTest,
+        currentTest,
+      },
+    } = this;
+
+    createTest(currentTest.testTemplateQuestions);
+  }
+
   render() {
     const {
       history,
       polls,
+      addPoll,
+      setTestData,
     } = this.props;
     const { page } = this.state;
 
@@ -102,12 +117,12 @@ class SurveyCreate extends Component {
           </div>
           <Input
             placeholder="Survey title"
-            name="user"
-            onChange={this.onChange}
+            name="name"
             style={{ marginRight: 'auto' }}
+            onChange={(event) => { return setTestData({ value: event.target.value, name: event.target.name }); }}
           />
           <Button
-            onClick={this.createUser}
+            onClick={this.createTest}
             color="success"
           >
               Create new survey
@@ -147,11 +162,13 @@ class SurveyCreate extends Component {
                                 <div className={styles.actions}>
                                   <Input
                                     placeholder="Question cost"
-                                    type="text"
+                                    type="number"
                                     name="questionCost"
+                                    min="0"
+                                    max="10"
+                                    onChange={(event) => { return setTestData({ value: event.target.value, name: event.target.name, questionId: poll.id }); }}
                                   />
                                   <AppSwitch
-                                    //   onChange={() => { return setCorrectAnswer(iterator); }}
                                     name="isCorrect"
                                     variant="pill"
                                     color="success"
@@ -159,6 +176,7 @@ class SurveyCreate extends Component {
                                     label
                                     dataOn={'\u2713'}
                                     dataOff={'\u2715'}
+                                    onChange={() => { addPoll({ questionId: poll.id, questionCost: 0 }); }}
                                   />
                                 </div>
                               </th>
@@ -186,10 +204,15 @@ class SurveyCreate extends Component {
 const mapStateToProps = (state) => {
   return {
     polls: getPolls(state),
+    tests: getTests(state),
+    currentTest: getCurrentTest(state),
   };
 };
 
 export default connect(mapStateToProps, {
   showModal,
   loadPolls: loadPollsRequest,
+  setTestData,
+  addPoll,
+  createTest: createTestRequest,
 })(SurveyCreate);
