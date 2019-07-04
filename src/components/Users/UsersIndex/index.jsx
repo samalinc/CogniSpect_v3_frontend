@@ -116,6 +116,7 @@ const UsersIndex = React.memo(({ user, onChange, isEdit }) => {
               type="number"
               name="studyGroup"
               className="form-control"
+              onChange={onUserDataChange}
             />
           </UserInput>
         )
