@@ -9,7 +9,6 @@ const { StaticRouter, matchPath } = require('react-router-dom');
 
 const { default: store } = require('../src/redux/store');
 const { default: App } = require('../src/containers/App');
-const { default: routes } = require('../src/containers/routes');
 
 module.exports = function universalLoader(req, res) {
   let promises = [];
